@@ -1,0 +1,31 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8082:8082"
+    environment:
+      - PORT=8082
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=rootpassword
+      - DB_NAME=blogdb
+      - JWT_SECRET=supersecreto
+    depends_on:
+      - mysql
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: blogdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+volumes:
+  db_data:
