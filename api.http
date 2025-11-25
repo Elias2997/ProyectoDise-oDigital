@@ -1,0 +1,83 @@
+###############################################
+# API de Publicaciones y Comentarios
+###############################################
+
+@host = http://localhost:8082
+@token = toke_va_aqui
+
+### 1) HEALTHCHECK
+GET {{host}}/
+Accept: application/json
+
+
+### 2) REGISTRAR USUARIO
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "jose baco",
+  "email": "josebaco@example2.com",
+  "password": "123456"
+}
+
+
+### 3) LOGIN (OBTENER TOKEN)
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "josebaco@example2.com",
+  "password": "123456"
+}
+
+
+### 4) CREAR PUBLICACIÓN (TOKEN)
+POST {{host}}/api/publicaciones
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Mi segunda publicación",
+  "content": "Contenido desde api.http"
+}
+
+
+### 5) LISTAR PUBLICACIONES
+GET {{host}}/api/publicaciones
+Accept: application/json
+
+
+### 6) OBTENER PUBLICACIÓN POR ID
+GET {{host}}/api/publicaciones/28
+Accept: application/json
+
+
+### 7) ACTUALIZAR PUBLICACIÓN (TOKEN)
+PUT {{host}}/api/publicaciones/28
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Título actualizado",
+  "content": "Contenido actualizado"
+}
+
+
+### 8) ELIMINAR PUBLICACIÓN (TOKEN)
+DELETE {{host}}/api/publicaciones/28
+Authorization: Bearer {{token}}
+
+
+### 9) AGREGAR COMENTARIO (TOKEN)
+POST {{host}}/api/publicaciones/2/comentarios
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "content": "Este es un comentario de prueba"
+}
+
+
+### 10) LISTAR COMENTARIOS
+GET {{host}}/api/publicaciones/2/comentarios
+Accept: application/json
