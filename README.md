@@ -131,4 +131,58 @@ Pruebas del API
 - Visual Studio Code
 - Extensión “REST Client” 
 
+### Instalación del Proyecto
+- Clonar el proyecto
+git clone <repo-url>
+cd ProyectoDise-oDigital
+- Crea un archivo .env
+PORT=8082
+DB_HOST=mysql
+DB_USER=root
+DB_PASSWORD=rootpassword
+DB_NAME=blogdb
+JWT_SECRET=tu_secreto_jwt
+JWT_EXPIRES_IN=7d
+
+- Asegurar no tener node_modules
+
+- Luego utilizar estos comandos:
+docker-compose down --volumes
+docker-compose build --no-cache
+docker-compose up
+
+Si todo correcto bien se podrá observar:
+DB connected
+Server listening on 8082
+
+
+
+### Autenticación
+
+| Método | Ruta                   | Descripción           |
+|--------|------------------------|------------------------|
+| POST   | /api/auth/register     | Registro de usuario    |
+| POST   | /api/auth/login        | Inicio de sesión       |
+
+---
+
+### Publicaciones
+
+| Método | Ruta                       | Descripción                                     | Protegido | Observaciones                    |
+|--------|----------------------------|--------------------------------------------------|-----------|----------------------------------|
+| GET    | /api/publicaciones         | Listar todas las publicaciones    | No        | Pública                          |
+| GET    | /api/publicaciones/:id     | Ver una publicación específica                  | No        | Pública                          |
+| POST   | /api/publicaciones         | Crear una nueva publicación                     | Sí        | Solo usuario autenticado         |
+| PUT    | /api/publicaciones/:id     | Editar publicación (solo el autor)              | Sí        | Verificar propiedad              |
+| DELETE | /api/publicaciones/:id     | Eliminar publicación (solo el autor)            | Sí        | Verificar propiedad              |
+
+---
+
+### Comentarios
+
+| Método | Ruta                                | Descripción                                 | Protegido | Observaciones                    |
+|--------|-------------------------------------|----------------------------------------------|-----------|----------------------------------|
+| GET    | /api/publicaciones/:id/comentarios  | Ver todos los comentarios de una publicación | No        | Pública                          |
+| POST   | /api/publicaciones/:id/comentarios  | Comentar en una publicación                  | Sí        | Usuario autenticado              |
+
 
