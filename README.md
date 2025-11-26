@@ -185,4 +185,39 @@ Server listening on 8082
 | GET    | /api/publicaciones/:id/comentarios  | Ver todos los comentarios de una publicación | No        | Pública                          |
 | POST   | /api/publicaciones/:id/comentarios  | Comentar en una publicación                  | Sí        | Usuario autenticado              |
 
+### Cómo usar api.http
+- Variables globales
+@host = http://localhost:8082
+@token = TU_TOKEN_AQUI
+Se usa así:
+Authorization: Bearer {{token}}
 
+### Pequeño ejemplo de la estructura de un request en api.http
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "jose@example.com",
+  "password": "123456"
+}
+
+### Puntos importantes
+- Hashing con Argon2
+- Autenticación JWT
+- Solo el autor puede modificar o eliminar sus publicaciones.
+- Validación estricta con Zod:
+Nadie puede enviar:
+Datos incompletos
+Tipos incorrectos
+Strings vacíos
+Contenido inválido
+- Todos los comentarios son limpiados usando sanitize-html.
+- Los errores no se filtran al usuario final.
+
+### Comandos útiles
+- Para levantar contenedores:
+docker-compose up
+- Para reconstruir:
+docker-compose build --no-cache
+- Para eliminar todo:
+docker-compose down --volumes
