@@ -129,8 +129,18 @@ Pruebas del API
 - Docker Desktop instalado 
 - Node.js (solo para correr fuera de Docker)
 - Visual Studio Code
-- Extensión “REST Client” 
+- Extensión “REST Client” -- VS Code → Extensiones → Buscar “REST Client” → Instalar
 
+### Inicialización de la API (IMPORTANTE) ✅✅✅✅✅✅✅✅✅
+Principalmente clonar el repositorio
+Tener abierto el Docker Desktop
+Abrir la terminal y agregar en este orden los comandos:
+- npm install
+- docker-compose down
+- docker-compose build --no-cache
+- docker-compose up
+
+### Pasos exteriores pero no menos importantes
 ### Instalación del Proyecto
 - Clonar el proyecto
 git clone <repo-url>
@@ -185,21 +195,71 @@ Server listening on 8082
 | GET    | /api/publicaciones/:id/comentarios  | Ver todos los comentarios de una publicación | No        | Pública                          |
 | POST   | /api/publicaciones/:id/comentarios  | Comentar en una publicación                  | Sí        | Usuario autenticado              |
 
-### Cómo usar api.http
-- Variables globales
-@host = http://localhost:8082
-@token = TU_TOKEN_AQUI
-Se usa así:
-Authorization: Bearer {{token}}
+### Uso de api.http, vista de forma más intuitiva
+Para ejecutar las peticiones api.http se necesita:
+✔ Visual Studio Code
+✔ Extensión REST Client
 
-### Pequeño ejemplo de la estructura de un request en api.http
-POST {{host}}/api/auth/login
-Content-Type: application/json
+- Este archivo permite probar la API SIN Postman, directamente desde VS Code.
+Incluye pruebas para:
+Registro
+Login
+CRUD de publicaciones
+CRUD de comentarios
+Healthcheck
+Autorización con JWT
 
+- Cómo usar el archivo api.http
+Abrir el archivo api.http en VS Code
+Sobre cada request se verá un botón:
+Send Request
+Hacer clic para enviar la petición
+La respuesta aparecerá en una ventana lateral
+Copiar el token del login y pégalo en la variable:
+@token = <pega-tu-token-aquí>
+
+- Verificación que la API esté activa
+GET http://localhost:3000/
+- Registrar usuario
+POST /api/auth/register
 {
-  "email": "jose@example.com",
+  "username": "Usuario",
+  "email": "nombre@test.com",
   "password": "123456"
 }
+- Login (copiar token)
+Se obtiene:
+{
+  "token": "eyJhbGciOi..."
+}
+Copiarlo y pegarlo en:
+@token = eyJhbGciOi...
+
+- Crear publicación (JWT requerido)
+POST /api/publicaciones
+Authorization: Bearer {{token}}
+
+- Obtener todas las publicaciones
+GET /api/publicaciones
+
+- Obtener una publicación por ID
+GET /api/publicaciones/1
+
+- Actualizar publicación (solo autor)
+PUT /api/publicaciones/1
+Authorization: Bearer {{token}}
+
+- Eliminar publicación
+DELETE /api/publicaciones/1
+Authorization: Bearer {{token}}
+
+- Crear comentario
+POST /api/publicaciones/1/comentarios
+Authorization: Bearer {{token}}
+
+- Obtener comentarios
+GET /api/publicaciones/1/comentarios
+
 
 ### Puntos importantes
 - Hashing con Argon2
