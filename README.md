@@ -86,4 +86,49 @@ server.js
 | GET    | /api/publicaciones/:id/comentarios  | Ver todos los comentarios de una publicación | No        | Pública                          |
 | POST   | /api/publicaciones/:id/comentarios  | Comentar en una publicación                  | Sí        | Usuario autenticado              |
 
+### Descripción General
+
+Este proyecto es una Api diseñar para manejar:
+- Usuarios
+- Publicaciones
+- Comentarios 
+Incluye autenticación, autorización, sanitización, validación y arquitectura MVC
+
+Está construido con:
+- Node.js + Express – Servidor backend
+- MySQL – Base de datos relacional
+- Docker + Docker Compose 
+- Zod – Validación de datos
+- JWT
+- argon2 – Hashing de contraseñas
+- sanitize-html – Prevención de XSS
+- Pruebas del API usando api.http
+
+### Objetivo principal
+Crear un servicio de publicaciones donde los usuarios puedan:
+- Registrarse y autenticarse
+- Crear, editar y eliminar publicaciones
+- Comentar en publicaciones
+- Leer publicaciones y comentarios
+
+### Arquitectura del proyecto
+src/
+  config/         → Configuración (DB, variables)
+  controllers/    → Lógica de cada endpoint
+  middlewares/    → Autenticación, validación, errores
+  models/         → Consultas y acceso a la BD
+  routes/         → Rutas agrupadas por recurso
+  utils/          → Funciones auxiliares (sanitización)
+  server.js       → Servidor principal
+
+Pruebas del API
+- Archivo api.http
+
+### Requisitos 
+
+- Docker Desktop instalado 
+- Node.js (solo para correr fuera de Docker)
+- Visual Studio Code
+- Extensión “REST Client” 
+
 
