@@ -1,83 +1,177 @@
 ###############################################
 # API de Publicaciones y Comentarios
+# Archivo de pruebas — VSCode REST Client
+#
+# Este archivo está preparado para que cualquiera
+# pueda probar la API desde cero.
+#
+# ⚠ CONSEJO:
+# Ejecuta los pasos en ORDEN (1 al 10).
 ###############################################
 
 @host = http://localhost:8082
-@token = toke_va_aqui
+@token =   # ← Pegar aquí el TOKEN obtenido en el paso 3
 
-### 1) HEALTHCHECK
+
+
+#################################################
+### 1) HEALTHCHECK — Verifica que la API funciona
+### Ejemplo de respuesta esperada:
+###   { "ok": true }
+#################################################
 GET {{host}}/
 Accept: application/json
 
 
-### 2) REGISTRAR USUARIO
+
+#########################################################
+### 2) REGISTRAR USUARIO — Crear nuevo usuario desde cero
+###
+### Si "email ya existe", cambia el correo por otro.
+###
+### Ejemplo de cómo se ve el request:
+###   {
+###     "username": "Ing. Juan Alvarenga",
+###     "email": "JuanAlvarenga@tester.com",
+###     "password": "123456"
+###   }
+#########################################################
 POST {{host}}/api/auth/register
 Content-Type: application/json
 
 {
-  "username": "jose baco",
-  "email": "josebaco@example2.com",
+  "username": "Ing. Juan Alvarenga",
+  "email": "JuanAlvarenga@tester.com",
   "password": "123456"
 }
 
 
-### 3) LOGIN (OBTENER TOKEN)
+
+#########################################################
+### 3) LOGIN — Obtener token JWT
+###
+### IMPORTANTE:
+###  - Copia SOLO el valor del "token".
+###  - PÉGALO en la variable @token arriba.
+###
+### Ejemplo de respuesta del login:
+###   {
+###     "token": "eyJhbGciOiJIUzI1NiIs..."
+###   }
+#########################################################
 POST {{host}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "josebaco@example2.com",
+  "email": "JuanAlvarenga@tester.com",
   "password": "123456"
 }
 
 
-### 4) CREAR PUBLICACIÓN (TOKEN)
+
+#########################################################
+### 4) CREAR PUBLICACIÓN — (TOKEN REQUERIDO)
+###
+### NOTA:
+###  - Esta será tu primera publicación.
+###  - La API devolverá: { "id": <N> }
+###
+### Guarda ese ID para los pasos 5 a 10.
+#########################################################
 POST {{host}}/api/publicaciones
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "title": "Mi segunda publicación",
-  "content": "Contenido desde api.http"
+  "title": "Mi primera publicación",
+  "content": "Este es el contenido inicial."
 }
 
 
-### 5) LISTAR PUBLICACIONES
+
+#########################################################
+### 5) LISTAR PUBLICACIONES — Verifica el ID real
+###
+### Ejemplo de respuesta esperada:
+###
+### [
+###   {
+###     "id": 1,
+###     "title": "Mi primera publicación",
+###     "content": "Este es el contenido inicial.",
+###     "author": "Ing. Juan Alvarenga"
+###   }
+### ]
+#########################################################
 GET {{host}}/api/publicaciones
 Accept: application/json
 
 
+
+#########################################################
 ### 6) OBTENER PUBLICACIÓN POR ID
-GET {{host}}/api/publicaciones/28
+###
+### Reemplaza <ID_PUBLICACION> por el ID real.
+###
+### EJEMPLO REAL:
+###   GET /api/publicaciones/1
+#########################################################
+GET {{host}}/api/publicaciones/<ID_PUBLICACION>
 Accept: application/json
 
 
-### 7) ACTUALIZAR PUBLICACIÓN (TOKEN)
-PUT {{host}}/api/publicaciones/28
+
+#########################################################
+### 7) ACTUALIZAR PUBLICACIÓN — (TOKEN REQUERIDO)
+###
+### EJEMPLO REAL:
+###   PUT /api/publicaciones/1
+###
+### Solo el autor puede modificarla.
+#########################################################
+PUT {{host}}/api/publicaciones/<ID_PUBLICACION>
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "title": "Título actualizado",
-  "content": "Contenido actualizado"
+  "title": "Mi publicación actualizada",
+  "content": "Este es un contenido actualizado."
 }
 
 
-### 8) ELIMINAR PUBLICACIÓN (TOKEN)
-DELETE {{host}}/api/publicaciones/28
+
+#########################################################
+### 8) ELIMINAR PUBLICACIÓN — (TOKEN REQUERIDO)
+###
+### EJEMPLO:
+###   DELETE /api/publicaciones/1
+#########################################################
+DELETE {{host}}/api/publicaciones/<ID_PUBLICACION>
 Authorization: Bearer {{token}}
 
 
-### 9) AGREGAR COMENTARIO (TOKEN)
-POST {{host}}/api/publicaciones/2/comentarios
+
+#########################################################
+### 9) AGREGAR COMENTARIO — (TOKEN REQUERIDO)
+###
+### EJEMPLO:
+###   POST /api/publicaciones/1/comentarios
+#########################################################
+POST {{host}}/api/publicaciones/<ID_PUBLICACION>/comentarios
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "content": "Este es un comentario de prueba"
+  "content": "Este es mi primer comentario."
 }
 
 
-### 10) LISTAR COMENTARIOS
-GET {{host}}/api/publicaciones/2/comentarios
+
+#########################################################
+### 10) LISTAR COMENTARIOS DE UNA PUBLICACIÓN
+###
+### EJEMPLO:
+###   GET /api/publicaciones/1/comentarios
+#########################################################
+GET {{host}}/api/publicaciones/<ID_PUBLICACION>/comentarios
 Accept: application/json
