@@ -16,23 +16,29 @@ Desarrollar una API RESTful utilizando Node.js y Express que permita a los usuar
 - Protección contra XSS.
 - Patrón de arquitectura MVC.
 - Manejo centralizado de errores.
-- Variables de entorno con `dotenv`.
+- Variable de entorno (.env).
 - Documentación de la API.
+- Docker
 
 ---
 
-## 🧱 Estructura de Carpetas Sugerida
+## 🧱 Estructura del Proyecto
 
 ```
-/api
-  /controllers
-  /models
-  /routes
-  /middlewares
-  /config
-  /utils
-server.js
+api/
+  src/
+    config/        → Configuración de base de datos y entorno
+    controllers/   → Lógica de cada endpoint (C del MVC)
+    models/        → Consultas y acceso a la BD (M del MVC)
+    routes/        → Define rutas agrupadas por recurso
+    middlewares/   → Validación, autenticación, manejo de errores
+    utils/         → Funciones auxiliares (sanitización)
+server.js        → Servidor principal
 .env
+docker-compose.yml
+Dockerfile
+api.http          → Archivo para pruebas desde VSCode
+
 ```
 
 ---
@@ -49,11 +55,18 @@ server.js
 ## 🧾 Funcionalidad por Rol
 
 ### Usuario
-- Registrar e iniciar sesión.
-- Crear, ver, actualizar y eliminar sus propias publicaciones.
-- Comentar en cualquier publicación pública.
-- No puede editar ni eliminar publicaciones de otros usuarios.
+👤 Usuario autenticado puede:
+Registrar cuenta
+Iniciar sesión
+Crear publicaciones
+Ver cualquier publicación
+Editar sus propias publicaciones
+Eliminar sus propias publicaciones
+Comentar en publicaciones
 
+❌ No puede:
+Editar publicaciones de otros
+Eliminar publicaciones de otros
 ---
 
 ## 📡 Endpoints Requeridos
@@ -219,7 +232,7 @@ Copiar el token del login y pégalo en la variable:
 @token = <pega-tu-token-aquí>
 
 - Verificación que la API esté activa
-GET http://localhost:3000/
+GET http://localhost:8082/
 - Registrar usuario
 POST /api/auth/register
 {
